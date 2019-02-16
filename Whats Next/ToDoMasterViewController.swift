@@ -21,22 +21,23 @@ class ToDoMasterViewController: UITableViewController {
 //            toDoArray = items
 //        }
         
-        var item = ItemModel()
-        item.isDone = true
-        item.title = "First Task"
-        toDoArray.append(item)
-        
-        item = ItemModel()
-        item.isDone = false
-        item.title = "Second Task"
-        toDoArray.append(item)
-        
-        item = ItemModel()
-        item.isDone = false
-        item.title = "Third Task"
-        toDoArray.append(item)
-        print(filePath!)
+//        var item = ItemModel()
+//        item.isDone = true
+//        item.title = "First Task"
+//        toDoArray.append(item)
+//
+//        item = ItemModel()
+//        item.isDone = false
+//        item.title = "Second Task"
+//        toDoArray.append(item)
+//
+//        item = ItemModel()
+//        item.isDone = false
+//        item.title = "Third Task"
+//        toDoArray.append(item)
+//        print(filePath!)
         //Check if the data you are getting isn't nil
+        loadData()
     }
     
     
@@ -100,6 +101,17 @@ class ToDoMasterViewController: UITableViewController {
             try data.write(to: self.filePath!)
         } catch{
             print("Error")
+        }
+    }
+    
+    func loadData(){
+        let decoder = PropertyListDecoder()
+        if let data = try? Data(contentsOf: filePath!){
+            do{
+               toDoArray =  try decoder.decode([ItemModel].self, from: data)
+            }catch{
+                print("Error in decoding the data \(error)")
+            }
         }
     }
     
