@@ -12,6 +12,7 @@
 		CAB1DC3D2217DB11009DF1F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC3B2217DB11009DF1F3 /* Main.storyboard */; };
 		CAB1DC3F2217DB13009DF1F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */; };
 		CAB1DC422217DB13009DF1F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC402217DB13009DF1F3 /* LaunchScreen.storyboard */; };
+		CAB1DC4A22181632009DF1F3 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB1DC4922181632009DF1F3 /* ItemModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAB1DC412217DB13009DF1F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CAB1DC432217DB13009DF1F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CAB1DC4922181632009DF1F3 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +62,17 @@
 				CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */,
 				CAB1DC402217DB13009DF1F3 /* LaunchScreen.storyboard */,
 				CAB1DC432217DB13009DF1F3 /* Info.plist */,
+				CAB1DC4B22181671009DF1F3 /* Models */,
 			);
 			path = "Whats Next";
+			sourceTree = "<group>";
+		};
+		CAB1DC4B22181671009DF1F3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CAB1DC4922181632009DF1F3 /* ItemModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAB1DC4A22181632009DF1F3 /* ItemModel.swift in Sources */,
 				CAB1DC3A2217DB11009DF1F3 /* ToDoMasterViewController.swift in Sources */,
 				CAB1DC382217DB11009DF1F3 /* AppDelegate.swift in Sources */,
 			);
