@@ -10,10 +10,15 @@ import UIKit
 
 class ToDoMasterViewController: UITableViewController {
     
-    var toDoArray = ["Find Mike", "Buy Eggos", "Destroy Demagorgon"]
+    var toDoArray = [String]()
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        if let items = defaults.array(forKey: "ToDoList") as? [String]{
+            toDoArray = items
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,6 +48,9 @@ class ToDoMasterViewController: UITableViewController {
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             print("Success")
             self.toDoArray.append(tf.text!)
+            
+            self.defaults.set(self.toDoArray, forKey: "ToDoList")
+            
             self.tableView.reloadData()   //Called when action is completed
         }
         alert.addTextField { (textField) in
