@@ -11,34 +11,43 @@ import UIKit
 class ToDoMasterViewController: UITableViewController {
     
     var toDoArray = [ItemModel]()
-    let defaults = UserDefaults.standard
+//    let defaults = UserDefaults.standard
+    let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+
     
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
 //        if let items = defaults.array(forKey: "ToDoList") as? [ItemModel]{
 //            toDoArray = items
 //        }
-//
         
         var item = ItemModel()
         item.isDone = true
         item.title = "First Task"
         toDoArray.append(item)
         
-        
         item = ItemModel()
         item.isDone = false
         item.title = "Second Task"
         toDoArray.append(item)
+        
+        item = ItemModel()
+        item.isDone = false
+        item.title = "Third Task"
+        toDoArray.append(item)
+        print(filePath!)
         //Check if the data you are getting isn't nil
     }
+    
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return toDoArray.count
     }
     
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("Cell for row at called")
         let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "myReuableCell", for: indexPath)
         cell.textLabel?.text = (toDoArray[indexPath.row] as ItemModel).title
         
@@ -49,12 +58,17 @@ class ToDoMasterViewController: UITableViewController {
     }
     
     
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         toDoArray[indexPath.row].isDone = !toDoArray[indexPath.row].isDone
+        saveData()
         self.tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
         //REMOVED CODE THAT USED TO SET ACCESSORY TYPE HERE
     }
+    
+    
+    
     
     @IBAction func barButtonPressed(_ sender: UIBarButtonItem) {
         var tf = UITextField()
@@ -64,7 +78,7 @@ class ToDoMasterViewController: UITableViewController {
             tempModel.title = tf.text!
             tempModel.isDone = false
             self.toDoArray.append(tempModel)
-            
+            self.saveData()
 //            self.defaults.set(self.toDoArray, forKey: "ToDoList")
             
             self.tableView.reloadData()   //Called when action is completed
@@ -75,6 +89,18 @@ class ToDoMasterViewController: UITableViewController {
         }
         alert.addAction(action)
         present(alert,animated: true,completion: nil)
+    }
+    
+    
+    func saveData(){
+        
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(self.toDoArray)
+            try data.write(to: self.filePath!)
+        } catch{
+            print("Error")
+        }
     }
     
 }
