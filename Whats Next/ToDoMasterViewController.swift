@@ -36,6 +36,22 @@ class ToDoMasterViewController: UITableViewController {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
     }
-
+    
+    @IBAction func barButtonPressed(_ sender: UIBarButtonItem) {
+        var tf = UITextField()
+        let alert = UIAlertController(title: "Add Item", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add", style: .default) { (action) in
+            print("Success")
+            self.toDoArray.append(tf.text!)
+            self.tableView.reloadData()   //Called when action is completed
+        }
+        alert.addTextField { (textField) in
+            textField.placeholder = "Enter Items"
+            tf = textField   //Called only when the UITextField is created
+        }
+        alert.addAction(action)
+        present(alert,animated: true,completion: nil)
+    }
+    
 }
 
