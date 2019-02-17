@@ -12,11 +12,16 @@ import CoreData
 class ToDoMasterViewController: UITableViewController {
     
     var toDoArray = [ItemModel]()
+    var selectedCategory : Category? {
+        didSet{
+            loadData()
+        }
+    }
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
 //    let defaults = UserDefaults.standard
     let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +45,6 @@ class ToDoMasterViewController: UITableViewController {
 //        toDoArray.append(item)
         print(filePath!)
         //Check if the data you are getting isn't nil
-        loadData()
     }
     
   
@@ -84,6 +88,7 @@ class ToDoMasterViewController: UITableViewController {
             let tempModel = ItemModel(context: self.context)
             tempModel.title = tf.text!
             tempModel.isDone = false
+            tempModel.parent = self.selectedCategory!    //CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART
             self.toDoArray.append(tempModel)
             self.saveData()
 //            self.defaults.set(self.toDoArray, forKey: "ToDoList")
@@ -111,9 +116,16 @@ class ToDoMasterViewController: UITableViewController {
         }
     }
     
-    func loadData(with request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()){
+    func loadData(with request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest(), predicate : NSPredicate? = nil){
 //        let decoder = PropertyListDecoder()
 //        if let data = try? Data(contentsOf: filePath!){
+        let categoryPredicate = NSPredicate(format: "parent.categoryTitle MATCHES %@", selectedCategory!.categoryTitle!)  //CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART
+        
+        if let pred = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,pred])
+        }else{
+            request.predicate = categoryPredicate
+        }
             do{
 //               toDoArray =  try decoder.decode([ItemModel].self, from: data)
 //                let request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()
@@ -129,9 +141,9 @@ extension ToDoMasterViewController : UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS %@", searchBar.text!)
+//        request.predicate = NSPredicate(format: "title CONTAINS %@", searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        loadData(with:request)
+        loadData(with:request,predicate: NSPredicate(format: "title CONTAINS %@", searchBar.text!))
 //        searchBar.resignFirstResponder()
     }
     

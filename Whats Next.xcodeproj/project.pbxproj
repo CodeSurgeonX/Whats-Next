@@ -13,10 +13,12 @@
 		CAB1DC3D2217DB11009DF1F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC3B2217DB11009DF1F3 /* Main.storyboard */; };
 		CAB1DC3F2217DB13009DF1F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */; };
 		CAB1DC422217DB13009DF1F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC402217DB13009DF1F3 /* LaunchScreen.storyboard */; };
+		CACFEFA72219544100A0B36D /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACFEFA62219544100A0B36D /* CategoryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		CA2903BA2218741E0029F51A /* ItemModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ItemModel.xcdatamodel; sourceTree = "<group>"; };
+		CAADD539221989AF00A21045 /* SwiftyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SwiftyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		CAB1DC342217DB11009DF1F3 /* Whats Next.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Whats Next.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAB1DC372217DB11009DF1F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CAB1DC392217DB11009DF1F3 /* ToDoMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoMasterViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +26,7 @@
 		CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAB1DC412217DB13009DF1F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CAB1DC432217DB13009DF1F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CACFEFA62219544100A0B36D /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +60,7 @@
 		CA2903BE2218744D0029F51A /* Controlller */ = {
 			isa = PBXGroup;
 			children = (
+				CACFEFA62219544100A0B36D /* CategoryTableViewController.swift */,
 				CAB1DC372217DB11009DF1F3 /* AppDelegate.swift */,
 				CAB1DC392217DB11009DF1F3 /* ToDoMasterViewController.swift */,
 			);
@@ -66,6 +70,7 @@
 		CAB1DC2B2217DB11009DF1F3 = {
 			isa = PBXGroup;
 			children = (
+				CAADD539221989AF00A21045 /* SwiftyPlayground.playground */,
 				CAB1DC362217DB11009DF1F3 /* Whats Next */,
 				CAB1DC352217DB11009DF1F3 /* Products */,
 			);
@@ -173,6 +178,7 @@
 				CAB1DC3A2217DB11009DF1F3 /* ToDoMasterViewController.swift in Sources */,
 				CA2903BB2218741E0029F51A /* ItemModel.xcdatamodeld in Sources */,
 				CAB1DC382217DB11009DF1F3 /* AppDelegate.swift in Sources */,
+				CACFEFA72219544100A0B36D /* CategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
