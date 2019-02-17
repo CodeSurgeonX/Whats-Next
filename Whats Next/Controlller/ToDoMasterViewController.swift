@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoMasterViewController: UITableViewController {
     
     var toDoArray = [ItemModel]()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
 //    let defaults = UserDefaults.standard
     let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 
@@ -35,12 +38,12 @@ class ToDoMasterViewController: UITableViewController {
 //        item.isDone = false
 //        item.title = "Third Task"
 //        toDoArray.append(item)
-//        print(filePath!)
+        print(filePath!)
         //Check if the data you are getting isn't nil
         loadData()
     }
     
-    
+  
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return toDoArray.count
@@ -63,6 +66,9 @@ class ToDoMasterViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         toDoArray[indexPath.row].isDone = !toDoArray[indexPath.row].isDone
         saveData()
+//        context.delete(toDoArray[indexPath.row])
+//        toDoArray.remove(at: indexPath.row)
+//        saveData()
         self.tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
         //REMOVED CODE THAT USED TO SET ACCESSORY TYPE HERE
@@ -75,7 +81,7 @@ class ToDoMasterViewController: UITableViewController {
         var tf = UITextField()
         let alert = UIAlertController(title: "Add Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
-            let tempModel = ItemModel()
+            let tempModel = ItemModel(context: self.context)
             tempModel.title = tf.text!
             tempModel.isDone = false
             self.toDoArray.append(tempModel)
@@ -95,25 +101,46 @@ class ToDoMasterViewController: UITableViewController {
     
     func saveData(){
         
-        let encoder = PropertyListEncoder()
+//        let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(self.toDoArray)
-            try data.write(to: self.filePath!)
+//            let data = try encoder.encode(self.toDoArray)
+//            try data.write(to: self.filePath!)
+            try context.save()
         } catch{
-            print("Error")
+            print("Error saving context \(error)")
         }
     }
     
-    func loadData(){
-        let decoder = PropertyListDecoder()
-        if let data = try? Data(contentsOf: filePath!){
+    func loadData(with request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()){
+//        let decoder = PropertyListDecoder()
+//        if let data = try? Data(contentsOf: filePath!){
             do{
-               toDoArray =  try decoder.decode([ItemModel].self, from: data)
+//               toDoArray =  try decoder.decode([ItemModel].self, from: data)
+//                let request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()
+                toDoArray =  try context.fetch(request)
             }catch{
                 print("Error in decoding the data \(error)")
             }
+            tableView.reloadData()
         }
     }
-    
-}
 
+extension ToDoMasterViewController : UISearchBarDelegate{
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        loadData(with:request)
+//        searchBar.resignFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+}
