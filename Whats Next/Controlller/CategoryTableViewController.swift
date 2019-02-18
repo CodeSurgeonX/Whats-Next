@@ -8,13 +8,17 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var categoryArrray = [Category]()
+    
+    let realmDB = try! Realm()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
+//        loadData()
     }
     
     func saveData(){
@@ -76,4 +80,17 @@ class CategoryTableViewController: UITableViewController {
         let category : Category = categoryArrray[indexpath.row]
         itemVC.selectedCategory = category
     }
+}
+
+extension CategoryTableViewController {
+
+    
+    func save(_ category : categoryItem){
+        
+    }
+    
+    func load(){
+        
+    }
+    
 }
