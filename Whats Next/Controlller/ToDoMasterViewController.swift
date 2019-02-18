@@ -9,9 +9,11 @@
 import UIKit
 import CoreData
 import RealmSwift
+import ChameleonFramework
 
 class ToDoMasterViewController: SwipeTableViewController {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     var toDoArray : Results<Item>?
     var realmDB = try! Realm()
     var selectedCategory : categoryItem? {
@@ -21,7 +23,24 @@ class ToDoMasterViewController: SwipeTableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.separatorStyle = .none
+       
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let colorHex = selectedCategory?.color {
+            title  = selectedCategory?.name
+            guard let navBar = navigationController?.navigationBar else {fatalError("No Freaking Nav Bar")}
+            if let navBarColor = UIColor(hexString: colorHex) {
+                navBar.barTintColor = navBarColor
+                navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+              
+                searchBar.barTintColor = navBarColor
+            }
+            
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return toDoArray?.count ?? 1
     }
@@ -30,10 +49,20 @@ class ToDoMasterViewController: SwipeTableViewController {
         if let itemD = toDoArray?[indexPath.row]{
             cell.textLabel?.text = itemD.title
             cell.accessoryType = itemD.isDone ? .checkmark : .none
-        }else{
+            
+            
+            if let parentColor = UIColor(hexString : (self.selectedCategory!.color))  {
+                if let myColor =  parentColor.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(toDoArray!.count)) {
+                    cell.backgroundColor = myColor
+                    cell.textLabel?.textColor = ContrastColorOf(myColor, returnFlat: true)
+                }
+            }
+           
+            
+        } else{
             cell.textLabel?.text = "No Items Added"
         }
-     
+
         return cell
     }
 
@@ -125,5 +154,10 @@ extension ToDoMasterViewController : UISearchBarDelegate{
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let originalColor =  UIColor(hexString: "1D9BF6") else {fatalError()}
+        navigationController?.navigationBar.barTintColor = originalColor
+        navigationController?.navigationBar.tintColor = originalColor
+    }
 
 }

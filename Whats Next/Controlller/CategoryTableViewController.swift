@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import RealmSwift
+import ChameleonFramework
 
 class CategoryTableViewController: SwipeTableViewController {
     var categoryArrray : Results<categoryItem>?
@@ -19,7 +20,7 @@ class CategoryTableViewController: SwipeTableViewController {
         super.viewDidLoad()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         load()
-        self.tableView.rowHeight = 80.00
+        self.tableView.separatorStyle = .none
     }
     
 
@@ -30,6 +31,7 @@ class CategoryTableViewController: SwipeTableViewController {
             if let textMat = tf.text, textMat.count > 0 {
                 let temp = categoryItem()
                 temp.name = textMat
+                temp.color = UIColor.randomFlat.hexValue()
                 self.save(temp)
                 self.tableView.reloadData()
             }
@@ -46,6 +48,9 @@ class CategoryTableViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categoryArrray?[indexPath.row].name
         cell.accessoryType = .disclosureIndicator
+        if let itemD = categoryArrray?[indexPath.row]{
+            cell.backgroundColor = UIColor.init(hexString: itemD.color)
+        }
         return cell
     }
     
