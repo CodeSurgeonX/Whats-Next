@@ -6,4 +6,5 @@ target 'Whats Next' do
 
   # Pods for Whats Next
     pod "RealmSwift"
+    pod 'SwipeCellKit'
 end
