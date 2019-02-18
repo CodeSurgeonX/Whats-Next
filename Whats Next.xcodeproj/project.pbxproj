@@ -13,6 +13,7 @@
 		CAB1DC3D2217DB11009DF1F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC3B2217DB11009DF1F3 /* Main.storyboard */; };
 		CAB1DC3F2217DB13009DF1F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */; };
 		CAB1DC422217DB13009DF1F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB1DC402217DB13009DF1F3 /* LaunchScreen.storyboard */; };
+		CACC8E35221B36E100142FC8 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACC8E34221B36E100142FC8 /* SwipeTableViewController.swift */; };
 		CACFEFA72219544100A0B36D /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACFEFA62219544100A0B36D /* CategoryTableViewController.swift */; };
 		CAFCA07F221A9B4300316BE4 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFCA07E221A9B4300316BE4 /* Item.swift */; };
 		CAFCA081221A9B5400316BE4 /* categoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFCA080221A9B5400316BE4 /* categoryItem.swift */; };
@@ -29,6 +30,7 @@
 		CAB1DC3E2217DB13009DF1F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAB1DC412217DB13009DF1F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CAB1DC432217DB13009DF1F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CACC8E34221B36E100142FC8 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		CACFEFA62219544100A0B36D /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		CAFCA07E221A9B4300316BE4 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		CAFCA080221A9B5400316BE4 /* categoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoryItem.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				CACFEFA62219544100A0B36D /* CategoryTableViewController.swift */,
 				CAB1DC372217DB11009DF1F3 /* AppDelegate.swift */,
 				CAB1DC392217DB11009DF1F3 /* ToDoMasterViewController.swift */,
+				CACC8E34221B36E100142FC8 /* SwipeTableViewController.swift */,
 			);
 			path = Controlller;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				CAB1DC382217DB11009DF1F3 /* AppDelegate.swift in Sources */,
 				CAFCA07F221A9B4300316BE4 /* Item.swift in Sources */,
 				CAFCA081221A9B5400316BE4 /* categoryItem.swift in Sources */,
+				CACC8E35221B36E100142FC8 /* SwipeTableViewController.swift in Sources */,
 				CACFEFA72219544100A0B36D /* CategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

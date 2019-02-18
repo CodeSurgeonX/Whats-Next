@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        dataEntry.age = 24
         
         do{
-            let realmDB = try Realm()
+            let _ = try Realm()
 //            try realmDB.write {
 //                realmDB.add(dataEntry)
 //            }

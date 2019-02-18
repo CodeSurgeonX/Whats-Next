@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import RealmSwift
 
-class ToDoMasterViewController: UITableViewController {
+class ToDoMasterViewController: SwipeTableViewController {
 
     var toDoArray : Results<Item>?
     var realmDB = try! Realm()
