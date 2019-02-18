@@ -26,7 +26,7 @@ class ToDoMasterViewController: SwipeTableViewController {
         return toDoArray?.count ?? 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "myReuableCell", for: indexPath)
+        let cell  = super.tableView(tableView, cellForRowAt: indexPath)
         if let itemD = toDoArray?[indexPath.row]{
             cell.textLabel?.text = itemD.title
             cell.accessoryType = itemD.isDone ? .checkmark : .none
@@ -94,6 +94,19 @@ class ToDoMasterViewController: SwipeTableViewController {
             toDoArray = self.selectedCategory?.items.sorted(byKeyPath: "title", ascending: false) //Load but not from DB
             tableView.reloadData()
         }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = toDoArray?[indexPath.row]{
+            do{
+                try realmDB.write {
+                    realmDB.delete(item)
+                }
+            }catch{
+                print("Error")
+            }
+        }
+    }
+    
     }
 
 extension ToDoMasterViewController : UISearchBarDelegate{
@@ -111,4 +124,6 @@ extension ToDoMasterViewController : UISearchBarDelegate{
             }
         }
     }
+    
+
 }
