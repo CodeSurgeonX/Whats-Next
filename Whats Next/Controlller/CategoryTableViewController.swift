@@ -63,6 +63,20 @@ class CategoryTableViewController: SwipeTableViewController {
         let category : categoryItem = categoryArrray![indexpath.row]
         itemVC.selectedCategory = category
     }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = self.categoryArrray?[indexPath.row]{
+            do{
+                
+                try self.realmDB.write {
+                    self.realmDB.delete(item)
+                }
+            }catch{
+                print(error)
+            }
+        }
+    }
+    
 }
 
 extension CategoryTableViewController {
@@ -81,7 +95,6 @@ extension CategoryTableViewController {
     func load(){
         categoryArrray = realmDB.objects(categoryItem.self)
     }
-    
 }
 
 

@@ -27,17 +27,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         guard orientation == .right else { return nil }
 //
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-//            if let item = self.categoryArrray?[indexPath.row]{
-//                do{
-//
-//                    try self.realmDB.write {
-//                        self.realmDB.delete(item)
-//                    }
-//                }catch{
-//                    print(error)
-//                }
-//            }
             print("Delete the cell")
+            self.updateModel(at : indexPath)
         }
         return [deleteAction]
     }
@@ -46,6 +37,11 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         var options = SwipeOptions()
         options.expansionStyle = .destructive
         return options
+    }
+    
+    func updateModel(at indexPath : IndexPath)  {
+        //Updates the model
+        print("Delete Model In Super")
     }
 
 
