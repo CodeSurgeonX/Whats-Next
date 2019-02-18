@@ -11,44 +11,26 @@ import CoreData
 import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var categoryArrray = [Category]()
+    var categoryArrray : Results<categoryItem>?
     
     let realmDB = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        loadData()
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        load()
     }
     
-    func saveData(){
-        do{
-            try context.save()
-        }catch{
-            print("Error saving context data \(error)")
-        }
-    }
-    
-    func loadData(with request:NSFetchRequest<Category> = Category.fetchRequest()){
-        do {
-            categoryArrray = try context.fetch(request)
-        }catch{
-            print("Error getting context data \(error)")
-        }
-        //Should fetch the results according to the category
-        tableView.reloadData()
-    }
 
     @IBAction func addButtonPressed(_ sender: Any) {
         var tf : UITextField = UITextField()
         let alert : UIAlertController = UIAlertController(title: "Add Category", message: nil, preferredStyle: .alert)
         let action : UIAlertAction = UIAlertAction(title: "Add", style: .default) { (alertaction) in
-            if let textMat = tf.text, textMat.count > 0 {     //for i in 1...5 where i%2==0
-            let categoryItem : Category = Category(context: self.context)
-            categoryItem.categoryTitle = textMat
-            self.categoryArrray.append(categoryItem)
-            self.saveData()
-            self.tableView.reloadData()
+            if let textMat = tf.text, textMat.count > 0 {
+                let temp = categoryItem()
+                temp.name = textMat
+                self.save(temp)
+                self.tableView.reloadData()
             }
         }
         alert.addTextField { (textField) in
@@ -61,13 +43,13 @@ class CategoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reusableCategoryCell", for: indexPath)
-        cell.textLabel?.text = categoryArrray[indexPath.row].categoryTitle
+        cell.textLabel?.text = categoryArrray?[indexPath.row].name ?? "No Categories Added"
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArrray.count
+        return categoryArrray?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -77,7 +59,7 @@ class CategoryTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let itemVC = segue.destination as! ToDoMasterViewController
         let indexpath = tableView.indexPathForSelectedRow!
-        let category : Category = categoryArrray[indexpath.row]
+        let category : categoryItem = categoryArrray![indexpath.row]
         itemVC.selectedCategory = category
     }
 }
@@ -86,11 +68,17 @@ extension CategoryTableViewController {
 
     
     func save(_ category : categoryItem){
-        
+        do {
+            try realmDB.write {
+                realmDB.add(category)
+            }
+        }catch {
+            print("Error adding data \(error)")
+        }
     }
     
     func load(){
-        
+        categoryArrray = realmDB.objects(categoryItem.self)
     }
     
 }

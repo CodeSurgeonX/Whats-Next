@@ -8,92 +8,67 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 class ToDoMasterViewController: UITableViewController {
-    
-    var toDoArray = [ItemModel]()
-    var selectedCategory : Category? {
+
+    var toDoArray : Results<Item>?
+    var realmDB = try! Realm()
+    var selectedCategory : categoryItem? {
         didSet{
             loadData()
         }
     }
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
-//    let defaults = UserDefaults.standard
-    let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if let items = defaults.array(forKey: "ToDoList") as? [ItemModel]{
-//            toDoArray = items
-//        }
-        
-//        var item = ItemModel()
-//        item.isDone = true
-//        item.title = "First Task"
-//        toDoArray.append(item)
-//
-//        item = ItemModel()
-//        item.isDone = false
-//        item.title = "Second Task"
-//        toDoArray.append(item)
-//
-//        item = ItemModel()
-//        item.isDone = false
-//        item.title = "Third Task"
-//        toDoArray.append(item)
-        print(filePath!)
-        //Check if the data you are getting isn't nil
     }
-    
-  
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDoArray.count
+        return toDoArray?.count ?? 1
     }
-    
-    
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "myReuableCell", for: indexPath)
-        cell.textLabel?.text = (toDoArray[indexPath.row] as ItemModel).title
-        
-        let item = toDoArray[indexPath.row]
-        cell.accessoryType = item.isDone ? .checkmark : .none
-        //Dont use that table view method of cellforrowat, keep in mind cell is stillbeing created
+        if let itemD = toDoArray?[indexPath.row]{
+            cell.textLabel?.text = itemD.title
+            cell.accessoryType = itemD.isDone ? .checkmark : .none
+        }else{
+            cell.textLabel?.text = "No Items Added"
+        }
+     
         return cell
     }
-    
-    
-    
+
+
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        toDoArray[indexPath.row].isDone = !toDoArray[indexPath.row].isDone
-        saveData()
-//        context.delete(toDoArray[indexPath.row])
-//        toDoArray.remove(at: indexPath.row)
-//        saveData()
+        toDoArray![indexPath.row].isDone = !toDoArray![indexPath.row].isDone
         self.tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
-        //REMOVED CODE THAT USED TO SET ACCESSORY TYPE HERE
     }
-    
-    
-    
-    
+
+
+
+
     @IBAction func barButtonPressed(_ sender: UIBarButtonItem) {
         var tf = UITextField()
         let alert = UIAlertController(title: "Add Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
-            let tempModel = ItemModel(context: self.context)
-            tempModel.title = tf.text!
-            tempModel.isDone = false
-            tempModel.parent = self.selectedCategory!    //CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART
-            self.toDoArray.append(tempModel)
-            self.saveData()
-//            self.defaults.set(self.toDoArray, forKey: "ToDoList")
-            
-            self.tableView.reloadData()   //Called when action is completed
+          
+//            tempItem.parentCategory = self.selectedCategory
+           
+            do{
+                try self.realmDB.write {
+                    if let c = tf.text?.count, c > 0 {
+                        let tempItem = Item()
+                        tempItem.title = tf.text!
+                        tempItem.isDone = false
+                        self.selectedCategory?.items.append(tempItem)
+                        self.realmDB.add(tempItem)
+                    }
+                }
+            }catch{
+                print("There was an error writing data \(error)")
+            }
+            self.tableView.reloadData()
         }
         alert.addTextField { (textField) in
             textField.placeholder = "Enter Items"
@@ -102,51 +77,25 @@ class ToDoMasterViewController: UITableViewController {
         alert.addAction(action)
         present(alert,animated: true,completion: nil)
     }
-    
-    
-    func saveData(){
-        
-//        let encoder = PropertyListEncoder()
-        do {
-//            let data = try encoder.encode(self.toDoArray)
-//            try data.write(to: self.filePath!)
-            try context.save()
-        } catch{
-            print("Error saving context \(error)")
-        }
-    }
-    
-    func loadData(with request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest(), predicate : NSPredicate? = nil){
-//        let decoder = PropertyListDecoder()
-//        if let data = try? Data(contentsOf: filePath!){
-        let categoryPredicate = NSPredicate(format: "parent.categoryTitle MATCHES %@", selectedCategory!.categoryTitle!)  //CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART CRITICAL PART
-        
-        if let pred = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,pred])
-        }else{
-            request.predicate = categoryPredicate
-        }
-            do{
-//               toDoArray =  try decoder.decode([ItemModel].self, from: data)
-//                let request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()
-                toDoArray =  try context.fetch(request)
-            }catch{
-                print("Error in decoding the data \(error)")
-            }
+
+
+
+    func loadData(){
+            toDoArray = self.selectedCategory?.items.sorted(byKeyPath: "title", ascending: true) //Load but not from DB
             tableView.reloadData()
         }
     }
 
 extension ToDoMasterViewController : UISearchBarDelegate{
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request : NSFetchRequest<ItemModel> = ItemModel.fetchRequest()
-//        request.predicate = NSPredicate(format: "title CONTAINS %@", searchBar.text!)
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        loadData(with:request,predicate: NSPredicate(format: "title CONTAINS %@", searchBar.text!))
-//        searchBar.resignFirstResponder()
-    }
-    
+
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//
+////        request.predicate = NSPredicate(format: "title CONTAINS %@", searchBar.text!)
+//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//        loadData(with:request,predicate: NSPredicate(format: "title CONTAINS %@", searchBar.text!))
+////        searchBar.resignFirstResponder()
+//    }
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadData()
